@@ -12,17 +12,17 @@ with open(f"{FOLDER_ROOT}/config.json") as f:
 
 FLASK_PROJECTS = [
     {
-        "title": "",  # add project title
+        "title": "First project data-test-id",  # add project title
         "qase_token": "6bd3e12b43dbac2f119b1f1b278868bc20d20a83",  # add QASE.io token
-        "qase_project_id": "CASE",  # add QASE.io project title
+        "qase_project_id": "DTIF",  # add QASE.io project title
         "env": [
             {
-                "title": "localhost",  # add ENV title
-                "url_flask": "localhost",  # add FLASK URL
-                "path_pytest": "documents/yourcoach/test_ui",  # add PYTHONPATH here
-                "url_frontend": "http://localhost",  # add frontend URL for API methods
-                "url_backend": "http://localhost",  # add backend URL for API methods
-                "url_selenoid": "http://localhost:4444/wd/hub"  # add Selenoid URL
+                "title": "stepushchenko.github.io",  # add env title
+                "url_flask": "localhost",
+                "path": "documents/data-test-id",
+                "url_frontend": "https://stepushchenko.github.io/about.html",
+                "url_backend": " ",
+                "url_selenoid": " "
             }
         ]
     }
@@ -56,7 +56,7 @@ FLASK_PROJECT_TITLE = selected_project_data['title']
 FLASK_ENVS = selected_project_data['env']
 FLASK_ENV_TITLE = selected_env_data['title']
 FLASK_SELENOID_TITLE = selected_selenoid_data['title']
-FLASK_PYTEST_PATH = selected_env_data['path_pytest']
+FLASK_PATH = selected_env_data['path_pytest']
 
 QASE_TOKEN = selected_project_data['qase_token']
 QASE_PROJECT_ID = selected_project_data['qase_project_id']

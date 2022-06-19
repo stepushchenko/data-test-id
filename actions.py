@@ -160,6 +160,8 @@ def choose_action(data):
         setting.DRIVER.open_page(data[1])
     elif data[0] == "click":
         setting.DRIVER.mouse_click(data[1])
+    elif data[0] == "clicks":
+        setting.DRIVER.mouse_clicks(data[1], data[2])
     elif data[0] == "enterValue":
         setting.DRIVER.enter_value(data[1], data[2])
     elif data[0] == "clearValue":
@@ -174,6 +176,8 @@ def choose_action(data):
         setting.DRIVER.collect_value(data[1], data[2])
     elif data[0] == "compareVariable":
         setting.DRIVER.compare_variable_with_data(data[1], data[2])
+    elif data[0] == "compareValue":
+        setting.DRIVER.compare_value_with_data(data[1], data[2])
     elif data[0] == "compareText":
         setting.DRIVER.compare_text_with_data(data[1], data[2])
     elif data[0] == "file":
@@ -182,6 +186,8 @@ def choose_action(data):
         setting.DRIVER.find_element(data[1])
     elif data[0] == "wait":
         setting.DRIVER.wait_some_time(data[1])
+    elif data[0] == "focus":
+        setting.DRIVER.element_focus(data[1])
     else:
         assert 1 == 0, f"Unknown action"
 
@@ -208,8 +214,16 @@ class Actions:
         time.sleep(setting.SLEEP)
         assert self.is_element_present(By.TAG_NAME, f"*[data-test-id='{selector}']"), f"Can not find {selector}"
         element = self.browser.find_element(By.TAG_NAME, f"*[data-test-id='{selector}']")
-        # self.focus(element)
         element.click()
+
+    def mouse_clicks(self, selector, position):  # clicks
+        position = '[' + str(position) + ']'
+        position = ast.literal_eval(position)
+        for number in position:
+            time.sleep(setting.SLEEP)
+            assert self.is_element_present(By.TAG_NAME, f"[data-test-id='{selector}']"), f"Can not find {selector}"
+            number = self.browser.find_elements(By.TAG_NAME, f"[data-test-id='{selector}']")[int(number)]
+            number.click()
 
     def clear_value(self, selector):  # clearValue
         time.sleep(setting.SLEEP)
@@ -264,6 +278,13 @@ class Actions:
         element = self.browser.find_element(By.TAG_NAME, f"*[data-test-id='{selector}']").text
         assert element == value, f"Expected result: {value}, actual result: {element}"
 
+    def compare_value_with_data(self, selector, value):  # compareValue
+        time.sleep(setting.SLEEP)
+        assert self.is_element_present(By.TAG_NAME, f"*[data-test-id='{selector}']"), f"Can not find {selector}"
+        element = self.browser.find_element(By.TAG_NAME, f"*[data-test-id='{selector}']")
+        element = element.get_attribute('value')
+        assert element == value, f"Expected result: {value}, actual result: {element}"
+
     def upload_file(self, selector, filename):  # file
         time.sleep(setting.SLEEP)
         assert self.is_element_present(By.TAG_NAME, f"*[data-test-id='{selector}']"), f"Can not find {selector}"
@@ -277,6 +298,14 @@ class Actions:
 
     def wait_some_time(self, time_in_sec):  # wait
         time.sleep(int(time_in_sec))
+
+    def element_focus(self, selector):  # focus
+        time.sleep(setting.SLEEP)
+        assert self.is_element_present(By.TAG_NAME, f"*[data-test-id='{selector}']"), f"Can not find {selector}"
+        element = self.browser.find_element(By.TAG_NAME, f"*[data-test-id='{selector}']")
+        self.focus(element)
+
+
 
     #
     # SUB methods

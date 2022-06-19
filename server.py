@@ -33,12 +33,12 @@ def dashboard():
     if request.args.get('prepare_specific_case') is not None:
         web.flask_change_pytest_start_type("prepare_specific_case")
         web.flask_change_selected_pytest_case(request.args.get('prepare_specific_case'))
-        subprocess.Popen([setting.FOLDER_ROOT + '/scripts/pytest_skeleton.sh', setting.FLASK_PYTEST_PATH])  # start bash script "pytest skeleton.py
+        subprocess.Popen([setting.FOLDER_ROOT + '/scripts/pytest_skeleton.sh', setting.FLASK_PATH])  # start bash script
 
     if request.args.get('prepare_run') is not None:
         web.flask_change_pytest_start_type("prepare_run")
         web.flask_change_selected_pytest_case(request.args.get('prepare_run'))
-        subprocess.Popen([setting.FOLDER_ROOT + '/scripts/pytest_skeleton.sh', setting.FLASK_PYTEST_PATH])  # start bash script "pytest skeleton.py
+        subprocess.Popen([setting.FOLDER_ROOT + '/scripts/pytest_skeleton.sh', setting.FLASK_PATH])  # start bash script
 
     if request.args.get('url') is not None:
         return web.flask_dashboard(request.args.get('url'))

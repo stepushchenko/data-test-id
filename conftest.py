@@ -1,7 +1,7 @@
 import pytest
 import requests
 import time
-import api
+# import api
 import setting
 import actions
 from selenium import webdriver
@@ -25,7 +25,7 @@ def run():
 
 @pytest.fixture(autouse=True, scope="function")
 def clear_database():
-    classAPI = api.API()
+    # classAPI = api.API()
 
     """
     Feel free to add your project API methods in api.py
