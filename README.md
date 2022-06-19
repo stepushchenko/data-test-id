@@ -25,6 +25,25 @@ Web application UI automated testing framework
 2. Add information about project, env and selenoid into the `setting.py` 
 3. Add `data-test-id` attributes inside each HTML-element which you want to operate with
 
+### Available methods
+
+1. openPage `[url]`
+2. click `[selector]`
+3. clicks `[selector, list_of_elements]`
+4. clearValue `[selector]`
+5. enterValue `[selector, value]`
+6. pressKeyboardNumbers `[value]`
+7. select `[selector, value]`
+8. collectText `[selector, variable_name]`
+9. collectValue `[selector, variable_name]`
+10. compareVariable `[variable_name, value]`  # get Variable value and compare it with second argument
+11. compareValue `[selector, value]`  # get selector Value and compare it with second argument
+12. compareText `[selector, value]`  # get selector Text and compare it with second argument
+13. file `[selector, filename]`
+14. findElement `[selector]`
+15. wait `[time_in_seconds]`
+16. focus `[selector]`
+
 ### How to run for the first time
 
 1. Run your project (it should to be available at the address which you entered in `url_frontend`)
