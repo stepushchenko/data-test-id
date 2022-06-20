@@ -12,14 +12,14 @@ with open(f"{FOLDER_ROOT}/config.json") as f:
 
 FLASK_PROJECTS = [
     {
-        "title": "First project data-test-id",  # add project title
+        "title": "First project data-test-id",
         "qase_token": "6bd3e12b43dbac2f119b1f1b278868bc20d20a83",  # add QASE.io token
-        "qase_project_id": "DTIF",  # add QASE.io project title
+        "qase_project_id": "DTIF",  # add QASE.io project
         "env": [
             {
-                "title": "stepushchenko.github.io",  # add env title
+                "title": "stepushchenko.github.io",
                 "url_flask": "localhost",
-                "path": "documents/data-test-id",
+                "path": "repos/data-test-id",
                 "url_frontend": "https://stepushchenko.github.io/about.html",
                 "url_backend": " ",
                 "url_selenoid": " "
@@ -27,12 +27,13 @@ FLASK_PROJECTS = [
         ]
     }
 ]
+
 FLASK_SELENOIDS = [
     {
-        "title": "Chrome 101",  # add Selenoid capabilities title here
-        "browserName": "chrome",  # add browser title
-        "browserVersion": "101.0",  # add browser version
-        "platform": "LINUX",  # add Platform
+        "title": "Chrome 101",
+        "browserName": "chrome",
+        "browserVersion": "101.0",
+        "platform": "LINUX",
         "selenoid:options": {
             "enableVNC": "True",
             "enableVideo": "True",
@@ -56,7 +57,7 @@ FLASK_PROJECT_TITLE = selected_project_data['title']
 FLASK_ENVS = selected_project_data['env']
 FLASK_ENV_TITLE = selected_env_data['title']
 FLASK_SELENOID_TITLE = selected_selenoid_data['title']
-FLASK_PATH = selected_env_data['path_pytest']
+FLASK_PATH = selected_env_data['path']
 
 QASE_TOKEN = selected_project_data['qase_token']
 QASE_PROJECT_ID = selected_project_data['qase_project_id']

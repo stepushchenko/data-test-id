@@ -169,11 +169,9 @@ def choose_action(data):
     elif data[0] == "pressKeyboardNumbers":
         setting.DRIVER.press_keyboard_numbers(data[1])
     elif data[0] == "select":
-        setting.DRIVER.select_one(data[1], data[2])
-    elif data[0] == "collectText":
-        setting.DRIVER.collect_text(data[1], data[2])
-    elif data[0] == "collectValue":
-        setting.DRIVER.collect_value(data[1], data[2])
+        setting.DRIVER.select_something(data[1], data[2], data[3])
+    elif data[0] == "collect":
+        setting.DRIVER.collect_text(data[1], data[2], data[3])
     elif data[0] == "compareVariable":
         setting.DRIVER.compare_variable_with_data(data[1], data[2])
     elif data[0] == "compareValue":
@@ -250,23 +248,21 @@ class Actions:
             self.action.send_keys(Keys.__str__(numpad))
         self.action.perform()
 
-    def select_one(self, selector, value):  # select
+    def select_something(self, element_type, selector, value):  # select (element_type: li, option)
         time.sleep(setting.SLEEP)
-        assert self.is_element_present(By.XPATH, f"//*[@data-test-id = '{selector}']//li[contains(text(), '{value}')]"), f"Can not find {selector} with value={value}"
-        element = self.browser.find_element(By.XPATH, f"//*[@data-test-id = '{selector}']//li[contains(text(), '{value}')]")
+        assert self.is_element_present(By.XPATH, f"//*[@data-test-id = '{selector}']//{element_type}[contains(text(), '{value}')]"), f"Can not find {selector} with value={value}"
+        element = self.browser.find_element(By.XPATH, f"//*[@data-test-id = '{selector}']//{element_type}[contains(text(), '{value}')]")
         element.click()
 
-    def collect_text(self, selector, name):  # collectText
-        time.sleep(setting.SLEEP)
-        assert self.is_element_present(By.TAG_NAME, f"*[data-test-id='{selector}']"), f"Can not find {selector}"
-        element = self.browser.find_element(By.TAG_NAME, f"*[data-test-id='{selector}']").text
-        setting.VARIABLES[name] = element
-
-    def collect_value(self, selector, name):  # collectValue
+    def collect_text(self, selector, element_type, name):  # collect (element_type: text, value)
         time.sleep(setting.SLEEP)
         assert self.is_element_present(By.TAG_NAME, f"*[data-test-id='{selector}']"), f"Can not find {selector}"
         element = self.browser.find_element(By.TAG_NAME, f"*[data-test-id='{selector}']")
-        setting.VARIABLES[name] = element.get_attribute('value')
+        if element_type == "text":
+            element = element.text
+        elif element_type == "value":
+            element = element.get_attribute('value')
+        setting.VARIABLES[name] = element
 
     def compare_variable_with_data(self, variable_name, value):  # compareVariable
         time.sleep(setting.SLEEP)
