@@ -1,1 +1,1 @@
-{"page": "cases", "project": 0, "env": 0, "selenoid": 0, "pytest_start_type": "prepare_specific_case", "pytest_case": "1", "qase_report_status": "not active", "qase_run_id": 1, "selected_pytest_start_type": "prepare_specific_case", "selected_pytest_case": "1"}
+{"page": "runs", "project": 0, "env": 0, "selenoid": 0, "pytest_start_type": "prepare_run", "pytest_case": "2", "qase_report_status": "active", "qase_run_id": 2, "selected_pytest_start_type": "prepare_specific_case", "selected_pytest_case": "1"}

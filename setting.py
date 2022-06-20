@@ -12,7 +12,7 @@ with open(f"{FOLDER_ROOT}/config.json") as f:
 
 FLASK_PROJECTS = [
     {
-        "title": "First project data-test-id",
+        "title": "data-test-id",
         "qase_token": "6bd3e12b43dbac2f119b1f1b278868bc20d20a83",  # add QASE.io token
         "qase_project_id": "DTIF",  # add QASE.io project
         "env": [
@@ -21,6 +21,14 @@ FLASK_PROJECTS = [
                 "url_flask": "localhost",
                 "path": "repos/data-test-id",
                 "url_frontend": "https://stepushchenko.github.io/about.html",
+                "url_backend": " ",
+                "url_selenoid": " "
+            },
+            {
+                "title": "localhost",
+                "url_flask": "localhost",
+                "path": "repos/data-test-id",
+                "url_frontend": "http://localhost:5500/about.html",
                 "url_backend": " ",
                 "url_selenoid": " "
             }
