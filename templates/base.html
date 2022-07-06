@@ -1,0 +1,70 @@
+<!doctype html>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/x-icon" href="../elements/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="/static/scripts/actions.js"></script>
+<title>Dashboard</title>
+
+<style>
+    .btn-link {
+        text-decoration: none;
+    }
+</style>
+
+<div class="container"><br>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="input-group">
+                <span class="input-group-text">Project</span>
+                <select id="project" onchange="user_update_project()" class="form-select">
+                {% for project in user['projects'] %}
+                    {% if project['id'] == user['project_id'] %}
+                        <option selected value="{{ project['id'] }}">{{ project['title'] }}</option>
+                    {% else %}
+                        <option value="{{ project['id'] }}">{{ project['title'] }}</option>
+                    {% endif %}
+                {% endfor %}
+                </select>
+                <span class="input-group-text">Env</span>
+                <select id="env" onchange="user_update_env()" class="form-select">
+                {% for env in user['envs'] %}
+                    {% if env['id'] == user['env_id'] %}
+                        <option selected value="{{ env['id'] }}">{{ env['title'] }}</option>
+                    {% else %}
+                        <option value="{{ env['id'] }}">{{ env['title'] }}</option>
+                    {% endif %}
+                {% endfor %}
+                </select>
+                <span class="input-group-text">Selenoid</span>
+                <select id="selenoid" onchange="user_update_selenoid()" class="form-select">
+                {% for selenoid in user['selenoids'] %}
+                    {% if selenoid['id'] == user['selenoid_id'] %}
+                        <option selected value="{{ selenoid['id'] }}">{{ selenoid['title'] }}</option>
+                    {% else %}
+                        <option value="{{ selenoid['id'] }}">{{ selenoid['title'] }}</option>
+                    {% endif %}
+                {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div><br>
+
+    <div class="text-center">
+        <button type="button" onclick="page_change('profile')" class="btn btn-link">Profile</button>
+        <button type="button" onclick="page_change('settings')" class="btn btn-link">Settings</button>
+        <button type="button" onclick="page_change('cases')" class="btn btn-link">Cases</button>
+        <button type="button" onclick="page_change('runs')" class="btn btn-link">Runs</button>
+    </div><br>
+
+    {% block content %}{% endblock %}
+</div>
+
+<div class="toast-container position-absolute p-3 bottom-0 end-0"  data-original-class="toast-container position-absolute p-3">
+    <div id="toastShow" class="toast fade bg-success text-white" data-bs-delay="1500">
+        <div id="toastMessage" class="toast-body"></div>
+    </div>
+</div>

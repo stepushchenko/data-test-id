@@ -1,17 +1,16 @@
 import pytest
 import setting
 import actions
-import web
 
-if setting.FLASK_PYTEST_START_TYPE == "prepare_specific_case" and setting.FLASK_CASE is not None:
-    web.flask_change_selected_qase_report_status("not active")  # deactivate reports
-    actions.prepare_specific_case(setting.FLASK_CASE)  # prepare specific case
-else:
-    web.flask_change_selected_qase_report_status("active")  # deactivate reports
-    actions.prepare_run(setting.FLASK_CASE)  # prepare run
+if actions.user('case_id') > 0:
+    actions.user_update("report", "not active")  # deactivate reports
+    actions.prepare_case(actions.user('case_id'))  # prepare specific case
+elif actions.user('run_id') > 0:
+    actions.user_update("report", "active")  # activate reports
+    actions.prepare_run(actions.user('run_id'))  # prepare run
 
 
-@pytest.mark.parametrize('parameter', setting.QASE_TESTS, ids=setting.QASE_IDS)
+@pytest.mark.parametrize('parameter', actions.user('qase_cases'), ids=actions.user('qase_ids'))
 def test_(parameter):
 
     for action_data in parameter:

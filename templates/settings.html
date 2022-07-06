@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="display-6 text-center">Settings</div><br>
+<table class="table align-middle">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Title</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for project in user['projects'] %}
+        <tr>
+            <th scope="row">{{ project['id'] }}</th>
+            <td>{{ project['title'] }}</td>
+            <td></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

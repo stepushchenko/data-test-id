@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<body onload="suits_get()">
+
+    <div class='display-6 text-center'>Cases</div><br>
+    <div class="text-center">
+        <button onclick="cases_get_tables()" type="button" class="btn btn-link">All cases</button>
+        <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#cases_select_suite">Select cases from suite</button>
+    </div><br>
+
+    <div id="cases_get_table"></div>
+
+    <div class="modal fade" id="cases_select_suite" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Select suite</h5>
+                    <button id="cases_select_suite_button_close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="suits_get" class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+{% endblock %}

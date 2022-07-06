@@ -1,100 +1,66 @@
 import os.path
-import json
-
-# FOLDERS URLs
 
 FOLDER_ROOT = os.path.dirname(os.path.realpath(__file__))
-FOLDER_ELEMENTS = FOLDER_ROOT + '/elements'
+SLEEP = 0.5
+PATH = 'repos/yourcoach/test_ui'
+URL_FLASK = 'localhost'
+URL_API = 'http://localhost:11100/api'
 
-# GET CONFIG
-with open(f"{FOLDER_ROOT}/config.json") as f:
-    config = json.load(f)
+URL_SELENOID = 'http://localhost:4444/wd/hub'
+USER_ID = 0
+DRIVER = ""
 
-FLASK_PROJECTS = [
+SUITS = [
     {
-        "title": "data-test-id",
-        "qase_token": "6bd3e12b43dbac2f119b1f1b278868bc20d20a83",  # add QASE.io token
-        "qase_project_id": "DTIF",  # add QASE.io project
-        "env": [
+        "id": 112,
+        "title": "Web-app",
+        "parent_id": 0,
+        "children": [
             {
-                "title": "stepushchenko.github.io",
-                "url_flask": "localhost",
-                "path": "repos/data-test-id",
-                "url_frontend": "https://stepushchenko.github.io/about.html",
-                "url_backend": " ",
-                "url_selenoid": " "
-            },
-            {
-                "title": "localhost",
-                "url_flask": "localhost",
-                "path": "repos/data-test-id",
-                "url_frontend": "http://localhost:5500/about.html",
-                "url_backend": " ",
-                "url_selenoid": " "
+                "id": 326,
+                "title": "Unit",
+                "parent_id": 112,
+                "children": [
+                    {
+                        "id": 1,
+                        "title": "Sign up",
+                        "parent_id": 326,
+                        "children": []
+                    },
+                    {
+                        "id": 353,
+                        "title": "Profile",
+                        "parent_id": 326,
+                        "children": [
+                            {
+                                "id": 361,
+                                "title": "Create",
+                                "parent_id": 353,
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "title": "Practice",
+                        "parent_id": 326,
+                        "children": [
+                            {
+                                "id": 354,
+                                "title": "Create",
+                                "parent_id": 4,
+                                "children": []
+                            },
+                            {
+                                "id": 355,
+                                "title": "Update",
+                                "parent_id": 4,
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     }
 ]
-
-FLASK_SELENOIDS = [
-    {
-        "title": "Chrome 101",
-        "browserName": "chrome",
-        "browserVersion": "101.0",
-        "platform": "LINUX",
-        "selenoid:options": {
-            "enableVNC": "True",
-            "enableVideo": "True",
-            "videoName": "video_title.mp4"
-        }
-    }
-]
-
-selected_selenoid_data = FLASK_SELENOIDS[config['selenoid']]
-selected_project_data = FLASK_PROJECTS[config['project']]
-selected_env_data = FLASK_PROJECTS[config['project']]['env'][config['env']]
-
-FLASK_PAGE = config['page']
-FLASK_PROJECT_ID = config['project']
-FLASK_ENV_ID = config['env']
-FLASK_SELENOID_ID = config['selenoid']
-FLASK_PYTEST_START_TYPE = config['pytest_start_type']
-FLASK_CASE = config['pytest_case']
-
-FLASK_PROJECT_TITLE = selected_project_data['title']
-FLASK_ENVS = selected_project_data['env']
-FLASK_ENV_TITLE = selected_env_data['title']
-FLASK_SELENOID_TITLE = selected_selenoid_data['title']
-FLASK_PATH = selected_env_data['path']
-
-QASE_TOKEN = selected_project_data['qase_token']
-QASE_PROJECT_ID = selected_project_data['qase_project_id']
-QASE_RUN_ID = config['qase_run_id']
-QASE_IDS = []
-QASE_TESTS = []
-QASE_ATTACHMENTS = {}
-QASE_REPORT = config['qase_report_status']
-QASE_CASE_ID = ""
-QASE_CASE_STATUS = ""
-QASE_PLANS_LIST = {}
-
-STORE_QASE_IDS = []
-STORE_QASE_DATA = []
-
-DRIVER = ""
-VARIABLES = {}
-
-# LINKS
-
-URL_FLASK = selected_env_data['url_flask']
-URL_FRONTEND = selected_env_data['url_frontend']
-URL_SELENOID = selected_env_data['url_selenoid']
-URL_BACKEND = selected_env_data['url_backend']
-
-# SELENOID
-
-SELENOID_CAPABILITIES = selected_selenoid_data
-
-# TIME
-
-SLEEP = 0.5

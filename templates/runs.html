@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="display-6 text-center">Runs</div><br>
+<div class="text-center">
+    <button onclick="plan_create()" id="createPlanButton" type="button" class="btn btn-link">Create run</button>
+</div><br>
+
+
+<table id="runs" class="table align-middle">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Title</th>
+            <th scope="col">Status</th>
+            <th scope="col">Cases count</th>
+            <th scope="col">Failed</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for plan in user['store_plans'] %}
+        <tr id="plan_{{ plan['id'] }}">
+            <th scope="row">{{ plan['id'] }}</th>
+            <td>{{ plan['title'] }}</td>
+            <td><span class="badge rounded-pill bg-secondary">unstarted</span></td>
+            <td>{{ plan['cases_count'] }}</td>
+            <td></td>
+            <td>
+                <button onclick="run_run({{ plan['id'] }})" class="btn btn-link">Run</button>
+                <button onclick="plan_delete({{ plan['id'] }})" class="btn btn-link">Delete</button>
+            </td>
+        </tr>
+    {% endfor %}
+
+    {% for run in user['store_runs'] %}
+        <tr>
+            <th scope="row">{{ run['id'] }}</th>
+            <td>{{ run['title'] }}</td>
+            <td>{{ run['status'] }}</td>
+            <td>{{ run['total_count'] }}</td>
+            <td>{{ run['failed_count'] }}</td>
+            <td>
+                <button id="run_get_link_{{ run['id'] }}" onclick="run_get_report({{ run['id'] }})" class="btn btn-link">Get report link</button>
+                <a id="run_link_{{ run['id'] }}" target="_blank" href="" class="btn btn-link" style="display:none;">Open report</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

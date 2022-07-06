@@ -1,7 +1,10 @@
+import copy
+import json
+
 import pytest
 import requests
 import time
-# import api
+import additional_api_requests
 import setting
 import actions
 from selenium import webdriver
@@ -12,56 +15,71 @@ import ast
 @pytest.fixture(autouse=True, scope="session")
 def run():
 
+    actions.user_update('variables', {})
+
     yield
 
-    if setting.QASE_REPORT == "active":
-        url = f"https://api.qase.io/v1/run/{setting.QASE_PROJECT_ID}/{setting.QASE_RUN_ID}/complete"
+    if actions.user('report') == "active":
+        url = f"https://api.qase.io/v1/run/{actions.user('project_code')}/{actions.user('run_id')}/complete"
         headers = {
             "Accept": "application/json",
-            "Token": setting.QASE_TOKEN
+            "Token": actions.user('token')
         }
         requests.request("POST", url, headers=headers).json()
 
 
 @pytest.fixture(autouse=True, scope="function")
 def clear_database():
-    # classAPI = api.API()
+    classAPI = additional_api_requests.API()
 
-    """
-    Feel free to add your project API methods in api.py
-    for using them in preconditions
-    """
+    if platform.system() == "Darwin":
+        classAPI.dev_clear_storage()  # clear database
+
+    parameters_sign_up_admin = {
+        "email": "coach1@example.com",
+        "code_keyboard": ["NUMPAD1", "NUMPAD2", "NUMPAD3", "NUMPAD4", "NUMPAD5", "NUMPAD6"],
+        "code": "123456",
+        "name": "Coach 1 (admin)",
+        "practice_title": "Admin practice",
+        "practice_description": "Admin practice description"
+    }
+
+    if platform.system() == "Darwin":
+        classAPI.user_auth_send_code_to_website(parameters_sign_up_admin)
+        classAPI.user_auth_sign_up(parameters_sign_up_admin)
+        classAPI.user_profile_become_coach()
+        classAPI.user_profile_update(parameters_sign_up_admin)
+        classAPI.admin_gamification_tiers_list()
+        classAPI.admin_gamification_tiers_update()
+        classAPI.user_auth_logout()
 
     yield
-
-    """
-    Feel free to add your project API methods in api.py
-    for using them in postconditions
-    """
 
 
 @pytest.fixture(autouse=True, scope="function")
 def qase_preconditions(request):
-    setting.QASE_CASE_STATUS = ""
+    actions.user_update('qase_case_status', '')
+
     try:
+
         # get a test number
         qase_test_case_id = request.node.name
         qase_test_case_id = qase_test_case_id.replace("]", "")
         qase_test_case_id = qase_test_case_id.partition('[')
         qase_test_case_id = qase_test_case_id[-1]
-        setting.QASE_CASE_ID = qase_test_case_id
+        actions.user_update('case_id', qase_test_case_id)
 
         # try to start the kids
 
         if platform.system() == "Darwin":  # open local browser
             setting.DRIVER = actions.Actions(webdriver.Chrome())
         else:  # tests will run on the remote server
-            setting.DRIVER = actions.Actions(webdriver.Remote(command_executor=setting.URL_SELENOID, desired_capabilities=setting.SELENOID_CAPABILITIES))
+            setting.DRIVER = actions.Actions(webdriver.Remote(command_executor=setting.URL_SELENOID, desired_capabilities=actions.user('selenoid_capabilities')))
 
-        url = f"https://api.qase.io/v1/case/{setting.QASE_PROJECT_ID}/{qase_test_case_id}"
+        url = f"https://api.qase.io/v1/case/{actions.user('project_code')}/{qase_test_case_id}"
         headers = {
             "Accept": "application/json",
-            "Token": setting.QASE_TOKEN
+            "Token": actions.user('token')
         }
         response = requests.get(url, headers=headers).json()
 
@@ -78,15 +96,14 @@ def qase_preconditions(request):
                         if len(it_can_be_a_list) > 0:
 
                             for child_case_id in it_can_be_a_list:
-                                url = f"https://api.qase.io/v1/case/{setting.QASE_PROJECT_ID}/{child_case_id}"
+                                url = f"https://api.qase.io/v1/case/{actions.user('project_code')}/{child_case_id}"
                                 headers = {
                                     "Accept": "application/json",
-                                    "Token": setting.QASE_TOKEN
+                                    "Token": actions.user('token')
                                 }
                                 response = requests.get(url, headers=headers).json()
                                 if response['result']['description'] is not None:  # will choose only automated test cases
                                     child_description = response['result']['description'].replace('\n', '')  # clear QASE description field
-                                    child_description = child_description.replace('`', '')  # clear QASE description field
                                     child_description = child_description.replace(']', '],')  # add comma in the end of the list
                                     child_description = '[' + child_description + ']'
                                     child_description = ast.literal_eval(child_description)
@@ -94,7 +111,7 @@ def qase_preconditions(request):
                                     for action_data in child_description:
                                         actions.choose_action(action_data)
     except Exception as e:
-        setting.QASE_CASE_STATUS = "blocked"
+        actions.user_update('qase_case_status', 'blocked')
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
@@ -110,44 +127,45 @@ def pytest_runtest_makereport(item):
 @pytest.fixture(autouse=True, scope="function")
 def case_result(request):
 
-    if setting.QASE_REPORT == "active":
+    if actions.user('report') == "active":
         # get a test number
         qase_test_case_id = request.node.name
         qase_test_case_id = qase_test_case_id.replace("]", "")
         qase_test_case_id = qase_test_case_id.partition('[')
         qase_test_case_id = qase_test_case_id[-1]
+        actions.user_update('case_id', qase_test_case_id)
 
         # start of the time tracking
         time_start = int(time.time())
 
     yield
 
-    if setting.QASE_REPORT == "active":
+    if actions.user('report') == "active":
 
         # duration of the case
         duration = int(time.time()) - time_start
 
         # status of the case
         comment = ''  # empty comment for passed cases
-        if setting.QASE_CASE_STATUS != "blocked":
+        if actions.user('qase_case_status') != "blocked":
             if request.node.rep_setup.passed:
                 if request.node.rep_call.failed:
-                    setting.QASE_CASE_STATUS = "failed"
+                    actions.user_update('qase_case_status', 'failed')
                     comment = comment + str(request.node.rep_call.longreprtext)  # comment with error in description
                 else:
-                    setting.QASE_CASE_STATUS = "passed"
+                    actions.user_update('qase_case_status', 'passed')
 
         # post
-        url = f"https://api.qase.io/v1/result/{setting.QASE_PROJECT_ID}/{setting.QASE_RUN_ID}"
+        url = f"https://api.qase.io/v1/result/{actions.user('project_code')}/{actions.user('run_id')}"
         payload = {
             "case_id": qase_test_case_id,
-            "status": setting.QASE_CASE_STATUS,
+            "status": actions.user('qase_case_status'),
             "time": duration,
             "comment": comment
         }
         headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Token": setting.QASE_TOKEN
+            "Token": actions.user('token')
         }
         requests.request("POST", url, json=payload, headers=headers).json()

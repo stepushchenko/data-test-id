@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="display-6 text-center">Profile</div><br>
+<div class="text-center">
+    <button type="button" onclick="user_logout()" class="btn btn-link">Log out</button>
+    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#user_password_change">Change password</button>
+</div>
+
+
+<div class="modal fade" tabindex="-1" aria-hidden="true" id="user_password_change">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change password</h5>
+                <button id="user_password_change_close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">New password</label>
+                    <input type="password" class="form-control" id="user_password_change_newPassword">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">New password</label>
+                    <input type="password" class="form-control" id="user_password_change_newPassword2">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="user_password_change()" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
